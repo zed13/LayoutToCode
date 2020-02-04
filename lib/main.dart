@@ -53,13 +53,20 @@ class _MainPageState extends State<MainPage> {
                 Expanded(
                   flex: 1,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Title("XML Layout"),
-                      TextFormField(
-                        decoration:
-                            InputDecoration(border: OutlineInputBorder()),
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          minLines: 100,
+                          decoration:
+                              InputDecoration(border: OutlineInputBorder()),
+                        ),
                       ),
                     ],
                   ),
@@ -67,16 +74,29 @@ class _MainPageState extends State<MainPage> {
                 Expanded(
                   flex: 1,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Title("Field initialization"),
-                      TextFormField(
-                          decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                      )),
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            minLines: 100,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            )),
+                      ),
                       Title("View bindings"),
-                      TextFormField(
-                        decoration:
-                            InputDecoration(border: OutlineInputBorder()),
+                      Expanded(
+                        flex: 1,
+                        child: TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          minLines: 100,
+                          decoration:
+                              InputDecoration(border: OutlineInputBorder()),
+                        ),
                       )
                     ],
                   ),
@@ -94,11 +114,9 @@ class _MainPageState extends State<MainPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              "Layout convert",
-              style: Theme.of(context).textTheme.title,
-            ),
+            Display1("Layout Convert"),
             ButtonsBar(),
           ],
         ),
@@ -130,6 +148,17 @@ class Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(title, style: Theme.of(context).textTheme.title);
+  }
+}
+
+class Display1 extends StatelessWidget {
+  final String title;
+
+  Display1(this.title, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title, style: Theme.of(context).textTheme.display1);
   }
 }
 
