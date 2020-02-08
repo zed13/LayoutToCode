@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class VariantChooser<T> extends StatelessWidget {
@@ -62,37 +61,6 @@ class RadioButton<T> extends StatelessWidget {
     );
   }
 }
-
-// class _RadioButtonState<T> extends State<RadioButton> {
-//   final String _title;
-//   final T _value;
-//   final T _groupValue;
-//   final ValueChanged<T> _onChanged;
-
-//   _RadioButtonState(
-//     this._title,
-//     this._value,
-//     this._groupValue,
-//     this._onChanged,
-//   );
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Row(
-//       children: <Widget>[
-//         Radio(
-//           groupValue: _groupValue,
-//           value: _value,
-//           onChanged: (value) {
-//             _onChanged(value);
-//             log("Chooser value changed from $_value to $value");
-//           },
-//         ),
-//         Text(_title),
-//       ],
-//     );
-//   }
-// }
 
 class Option<T> {
   final T value;
