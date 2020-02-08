@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:layout_convert/actions.dart';
 import 'package:layout_convert/app_state.dart';
 import 'package:layout_convert/containers/language_container.dart';
+import 'package:layout_convert/presentation/text.dart';
 import 'package:layout_convert/reducers.dart';
 import 'package:layout_convert/selectors.dart';
 import 'package:redux/redux.dart';
@@ -82,7 +83,7 @@ class _MainPageState extends State<MainPage> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
-                      Title("XML Layout"),
+                      TitleText("XML Layout"),
                       Expanded(
                         flex: 1,
                         child: TextFormField(
@@ -101,7 +102,7 @@ class _MainPageState extends State<MainPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Title("Field initialization"),
+                      TitleText("Field initialization"),
                       Expanded(
                         flex: 1,
                         child: TextFormField(
@@ -112,7 +113,7 @@ class _MainPageState extends State<MainPage> {
                               border: OutlineInputBorder(),
                             )),
                       ),
-                      Title("View bindings"),
+                      TitleText("View bindings"),
                       Expanded(
                         flex: 1,
                         child: TextFormField(
@@ -141,7 +142,7 @@ class _MainPageState extends State<MainPage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Display1("Layout Convert"),
+            Display1Text("Layout Convert"),
             ButtonsBar(),
           ],
         ),
@@ -191,27 +192,6 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-class Title extends StatelessWidget {
-  final String title;
-
-  Title(this.title, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(title, style: Theme.of(context).textTheme.title);
-  }
-}
-
-class Display1 extends StatelessWidget {
-  final String title;
-
-  Display1(this.title, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(title, style: Theme.of(context).textTheme.display1);
-  }
-}
 
 List<Option<JavaAccessModifier>> accessModifiersOptions = [
   Option(value: JavaAccessModifier.public, name: "public"),
