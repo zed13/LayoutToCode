@@ -19,6 +19,19 @@ class JavaParams {
     this.postfix = "View",
   });
 
+  JavaParams clone({
+    JavaAccessModifier fieldModifier,
+    VariableStyle fieldStyle,
+    String prefix,
+    String postfix,
+  }) =>
+      JavaParams(
+        fieldModifier: fieldModifier ?? this.fieldModifier,
+        fieldStyle: fieldStyle ?? this.fieldStyle,
+        prefix: prefix ?? this.prefix,
+        postfix: postfix ?? this.postfix,
+      );
+
   bool operator ==(o) =>
       o is JavaParams &&
       fieldModifier == o.fieldModifier &&
@@ -64,4 +77,17 @@ class KotlinParams {
     hashCode = 31 * hashCode + postfix.hashCode;
     return hashCode;
   }
+
+  KotlinParams clone({
+    KotlinAccessModifier fieldModifier,
+    VariableStyle fieldStyle,
+    String prefix,
+    String postfix,
+  }) =>
+      KotlinParams(
+        fieldModifier: fieldModifier ?? this.fieldModifier,
+        fieldStyle: fieldStyle ?? this.fieldStyle,
+        prefix: prefix ?? this.prefix,
+        postfix: postfix ?? this.postfix,
+      );
 }

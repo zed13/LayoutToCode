@@ -147,7 +147,9 @@ class _MainPageState extends State<MainPage> {
         ),
         LanguageAwareContainer(
           targetLanguage: Language.java,
-          child: JavaAccessModifierContainer(
+          child: VariantChooserContainer<JavaAccessModifier>(
+            variantSelector: javaAccessModifierSelector,
+            eventFactory: (value) => SelectJavaModifierAction(value),
             builder: (builder, modifier, callback) => VariantChooser(
               title: "Access modifier",
               groupValue: modifier,
@@ -158,7 +160,9 @@ class _MainPageState extends State<MainPage> {
         ),
         LanguageAwareContainer(
           targetLanguage: Language.kotlin,
-          child: KotlinAccessModifierContainer(
+          child: VariantChooserContainer<KotlinAccessModifier>(
+            variantSelector: kotlinAccessModifierSelector,
+            eventFactory: (value) => SelectKotlinModifierAction(value),
             builder: (context, modifier, callback) => VariantChooser(
               title: "Acess modifier",
               groupValue: modifier,
@@ -167,11 +171,15 @@ class _MainPageState extends State<MainPage> {
             ),
           ),
         ),
-        VariantChooser(
-          title: "Code field name style",
-          groupValue: VariableStyle.lowerCamelCase,
-          options: variableStyleOptions,
-          onChanged: (value) {},
+        VariantChooserContainer<VariableStyle>(
+          variantSelector: javaFieldStyleSelector,
+          eventFactory: (value) => SelectJavaFieldStyleAction(value),
+          builder: (context, value, callback) => VariantChooser(
+            title: "Code field name style",
+            groupValue: value,
+            options: variableStyleOptions,
+            onChanged: callback,
+          ),
         ),
         Additions(),
         RaisedButton(

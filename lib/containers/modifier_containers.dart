@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:layout_convert/actions.dart';
 import 'package:layout_convert/app_state.dart';
-import 'package:layout_convert/models.dart';
 
 import '../selectors.dart';
 
@@ -14,46 +12,29 @@ typedef VariantViewModelBuilder<T> = Widget Function(
   ValueCallback<T> onChanged,
 );
 
-class JavaAccessModifierContainer extends StatelessWidget {
-  final VariantViewModelBuilder<JavaAccessModifier> builder;
+typedef EventFactory<T> = dynamic Function(T value);
 
-  JavaAccessModifierContainer({
+class VariantChooserContainer<T> extends StatelessWidget {
+  final VariantViewModelBuilder<T> builder;
+  final Selector<T> variantSelector;
+  final EventFactory<T> eventFactory;
+
+  VariantChooserContainer({
     Key key,
     @required this.builder,
+    @required this.variantSelector,
+    @required this.eventFactory
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, JavaAccessModifier>(
+    return StoreConnector<AppState, T>(
       distinct: true,
-      converter: (store) => javaAccessModifierSelector(store.state),
+      converter: (store) => variantSelector(store.state),
       builder: (context, modifier) =>
-          StoreConnector<AppState, ValueCallback<JavaAccessModifier>>(
+          StoreConnector<AppState, ValueCallback<T>>(
         converter: (store) =>
-            (value) => store.dispatch(SelectJavaModifierAction(value)),
-        builder: (context, callback) => builder(context, modifier, callback),
-      ),
-    );
-  }
-}
-
-class KotlinAccessModifierContainer extends StatelessWidget {
-  final VariantViewModelBuilder<KotlinAccessModifier> builder;
-
-  KotlinAccessModifierContainer({
-    Key key,
-    @required this.builder,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, KotlinAccessModifier>(
-      distinct: true,
-      converter: (store) => kotlinAccessModifierSelector(store.state),
-      builder: (context, modifier) =>
-          StoreConnector<AppState, ValueCallback<KotlinAccessModifier>>(
-        converter: (store) =>
-            (value) => store.dispatch(SelectKotlinModifierAction(value)),
+            (value) => store.dispatch(eventFactory(value)),
         builder: (context, callback) => builder(context, modifier, callback),
       ),
     );

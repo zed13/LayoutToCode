@@ -18,12 +18,9 @@ Language languageReducer(Language language, action) {
 
 JavaParams javaParamsReducer(JavaParams params, action) {
   if (action is SelectJavaModifierAction) {
-    return JavaParams(
-      fieldModifier: action.modifier,
-      fieldStyle: params.fieldStyle,
-      prefix: params.prefix,
-      postfix: params.postfix,
-    );
+    return params.clone(fieldModifier: action.modifier);
+  } else if (action is SelectJavaFieldStyleAction) {
+    return params.clone(fieldStyle: action.style);
   }
   return params;
 }
