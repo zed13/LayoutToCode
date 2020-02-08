@@ -7,7 +7,7 @@ void main() {
   group("Generator test", () {
     test("generate fields", () {
       var generator = gen.Generator(
-        AccessLevel.protected,
+        JavaAccessModifier.protected,
         VariableStyle.snakeCase,
         VariableStyle.upperCamelCase,
         "m",

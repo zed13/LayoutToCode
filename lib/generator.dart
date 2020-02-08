@@ -3,7 +3,7 @@ import 'extractor.dart';
 import 'utils.dart';
 
 class Generator {
-  final AccessLevel accessLevel;
+  final JavaAccessModifier accessLevel;
   final VariableStyle layoutIdStyle;
   final VariableStyle generatedVariableStyle;
   final String variablePrefix;
@@ -39,13 +39,13 @@ class Generator {
   }
 }
 
-String javaAccessName(AccessLevel accessLevel) {
+String javaAccessName(JavaAccessModifier accessLevel) {
   switch (accessLevel) {
-    case AccessLevel.public:
+    case JavaAccessModifier.public:
       return "public";
-    case AccessLevel.protected:
+    case JavaAccessModifier.protected:
       return "protected";
-    case AccessLevel.private:
+    case JavaAccessModifier.private:
       return "private";
     default:
       return "";

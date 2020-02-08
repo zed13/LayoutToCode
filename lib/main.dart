@@ -1,20 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:layout_convert/actions.dart';
+import 'package:layout_convert/app_state.dart';
+import 'package:layout_convert/redusers.dart';
+import 'package:redux/redux.dart';
 import 'models.dart';
+import 'presentation/chooser.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  final store = Store<AppState>(convertReducer,
+      initialState: AppState(
+        language: Language.java,
+        javaParams: JavaParams(),
+        kotlinParams: KotlinParams(),
+      ));
+
+  runApp(MyApp(store));
+}
 
 class MyApp extends StatelessWidget {
+  final Store<AppState> store;
+
+  MyApp(this.store, {Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Layout Convert',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.pink,
-        backgroundColor: Color.fromARGB(255, 48, 48, 48),
-        primaryColor: Colors.cyan,
+    return StoreProvider(
+      store: store,
+      child: MaterialApp(
+        title: 'Layout Convert',
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          primarySwatch: Colors.pink,
+          backgroundColor: Color.fromARGB(255, 48, 48, 48),
+          primaryColor: Colors.cyan,
+        ),
+        home: MainPage(title: 'Layout Convert'),
       ),
-      home: MainPage(title: 'Layout Convert'),
     );
   }
 }
@@ -110,32 +132,65 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Display1("Layout Convert"),
-            ButtonsBar(),
-          ],
-        ),
-        VariantChooser(
-          "Access modifier",
-          AccessLevel.public,
-          accessModifiersOptions,
-        ),
-        VariantChooser(
-          "Code field name style",
-          VariableStyle.lowerCamelCase,
-          variableStyleOptions,
-        ),
-        Additions(),
-        RaisedButton(
-          onPressed: () {},
-          child: Text("CONVERT"),
-        )
-      ],
+    return StoreBuilder<AppState>(
+      builder: (context, store) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Display1("Layout Convert"),
+              ButtonsBar(),
+            ],
+          ),
+          StoreConnector<AppState, Language>(
+            converter: (store) => store.state.language,
+            builder: (context, lang) => Row(
+              children: <Widget>[
+                Visibility(
+                  visible: lang == Language.java,
+                  child: StoreConnector<AppState, JavaAccessModifier>(
+                    converter: (store) => store.state.javaParams.fieldModifier,
+                    builder: (builder, modifier) => VariantChooser(
+                      title: "Access modifier",
+                      groupValue: modifier,
+                      options: accessModifiersOptions,
+                      onChanged: (value) =>
+                          store.dispatch(SelectJavaModifierAction(value)),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: lang == Language.kotlin,
+                  child: StoreConnector<AppState, KotlinAccessModifier>(
+                    converter: (store) =>
+                        store.state.kotlinParams.fieldModifier,
+                    builder: (context, modifier) => VariantChooser(
+                      title: "Acess modifier",
+                      groupValue: modifier,
+                      options: kotlinAccessModifiersOptions,
+                      onChanged: (value) =>
+                          store.dispatch(SelectKotlinModifierAction(value)),
+                    ),
+                  ),
+                ),
+                VariantChooser(
+                  title: "Code field name style",
+                  groupValue: VariableStyle.lowerCamelCase,
+                  options: variableStyleOptions,
+                  onChanged: (value) =>
+                      store.dispatch(SelectFieldStyleAction(value)),
+                ),
+              ],
+            ),
+          ),
+          Additions(),
+          RaisedButton(
+            onPressed: () {},
+            child: Text("CONVERT"),
+          )
+        ],
+      ),
     );
   }
 }
@@ -162,97 +217,24 @@ class Display1 extends StatelessWidget {
   }
 }
 
-class VariantChooser<T> extends StatefulWidget {
-  final String title;
-  final T initialValue;
-  final List<Option<T>> options;
-
-  VariantChooser(this.title, this.initialValue, this.options);
-
-  @override
-  State<StatefulWidget> createState() {
-    return VariantChooserState(title, initialValue, options);
-  }
-}
-
-class VariantChooserState<T> extends State<VariantChooser> {
-  VariantChooserState(String title, T initialOption, List<Option<T>> options) {
-    this._selectedVariant = initialOption;
-    this._options = options;
-    this._title = title;
-  }
-
-  T _selectedVariant;
-
-  List<Option<T>> _options;
-
-  String _title;
-
-  void onSelectionChanged(T value) {
-    setState(() {
-      _selectedVariant = value;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(_title, style: TextStyle(fontSize: 16)),
-        ..._buildVariants()
-      ],
-    );
-  }
-
-  List<Widget> _buildVariants() {
-    return _options
-        .map((variant) => radioButton(
-              title: variant.name,
-              currentGroupValue: _selectedVariant,
-              value: variant.value,
-              onChanged: (value) => onSelectionChanged(value),
-            ))
-        .toList();
-  }
-}
-
-Widget radioButton<T>({
-  @required String title,
-  @required T currentGroupValue,
-  @required T value,
-  @required ValueChanged<T> onChanged,
-}) {
-  return Row(
-    children: <Widget>[
-      Radio(
-        groupValue: currentGroupValue,
-        value: value,
-        onChanged: onChanged,
-      ),
-      Text(title),
-    ],
-  );
-}
-
-class Option<T> {
-  final T value;
-  final String name;
-
-  Option({this.value, this.name});
-}
-
-List<Option<AccessLevel>> accessModifiersOptions = [
-  Option(value: AccessLevel.public, name: "public"),
-  Option(value: AccessLevel.protected, name: "protected"),
-  Option(value: AccessLevel.private, name: "private"),
-  Option(value: AccessLevel.packagePrivate, name: "package-private")
+List<Option<JavaAccessModifier>> accessModifiersOptions = [
+  Option(value: JavaAccessModifier.public, name: "public"),
+  Option(value: JavaAccessModifier.protected, name: "protected"),
+  Option(value: JavaAccessModifier.private, name: "private"),
+  Option(value: JavaAccessModifier.packagePrivate, name: "package-private")
 ];
 
 List<Option<VariableStyle>> variableStyleOptions = [
   Option(value: VariableStyle.snakeCase, name: "snake case"),
   Option(value: VariableStyle.lowerCamelCase, name: "lower camel case"),
   Option(value: VariableStyle.upperCamelCase, name: "upper camel case")
+];
+
+List<Option<KotlinAccessModifier>> kotlinAccessModifiersOptions = [
+  Option(value: KotlinAccessModifier.public, name: "public"),
+  Option(value: KotlinAccessModifier.protected, name: "protected"),
+  Option(value: KotlinAccessModifier.private, name: "private"),
+  Option(value: KotlinAccessModifier.internal, name: "internal"),
 ];
 
 class Additions extends StatefulWidget {
@@ -283,8 +265,10 @@ class AdditionsState extends State<Additions> {
   }
 }
 
-Widget inputField(
-    {@required String labelText, @required ValueChanged<String> onChanged}) {
+Widget inputField({
+  @required String labelText,
+  @required ValueChanged<String> onChanged,
+}) {
   return Container(
     padding: EdgeInsets.only(top: 16),
     child: SizedBox(
@@ -302,57 +286,47 @@ Widget inputField(
   );
 }
 
-class ButtonsBar extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return ButtonsBarState();
-  }
-}
-
-class ButtonsBarState extends State<ButtonsBar> {
-  Language _selectedLanguage = Language.java;
-
+class ButtonsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        _buildButton(
-          image: Image.asset('assets/ic_java_48.png'),
-          value: Language.java,
-          groupValue: _selectedLanguage,
-        ),
-        VerticalDivider(
-          width: 32,
-        ),
-        _buildButton(
-          image: Image.asset(
-            'assets/ic_kotlin_48.png',
-            height: 152,
-            width: 152,
+    return StoreConnector<AppState, Language>(
+      converter: (store) => store.state.language,
+      builder: (context, language) => Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _buildButton(
+            image: Image.asset('assets/ic_java_48.png'),
+            value: Language.java,
+            groupValue: language,
           ),
-          value: Language.kotlin,
-          groupValue: _selectedLanguage,
-        )
-      ],
-    );
-  }
-
-  Widget _buildButton({image: Image, value: Language, groupValue: Language}) {
-    return Container(
-      height: 152,
-      width: 152,
-      color: groupValue == value ? Colors.white12 : Colors.transparent,
-      child: GestureDetector(
-        child: image,
-        onTap: () => _onSelectionChanged(value),
+          VerticalDivider(
+            width: 32,
+          ),
+          _buildButton(
+            image: Image.asset(
+              'assets/ic_kotlin_48.png',
+              height: 152,
+              width: 152,
+            ),
+            value: Language.kotlin,
+            groupValue: language,
+          )
+        ],
       ),
     );
   }
 
-  void _onSelectionChanged(Language value) {
-    setState(() {
-      _selectedLanguage = value;
-    });
+  Widget _buildButton({image: Image, value: Language, groupValue: Language}) {
+    return StoreBuilder<AppState>(
+      builder: (context, store) => Container(
+        height: 152,
+        width: 152,
+        color: groupValue == value ? Colors.white12 : Colors.transparent,
+        child: GestureDetector(
+          child: image,
+          onTap: () => store.dispatch(ChangeLanguageAction(value)),
+        ),
+      ),
+    );
   }
 }
