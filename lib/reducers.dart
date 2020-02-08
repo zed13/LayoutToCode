@@ -19,7 +19,7 @@ Language languageReducer(Language language, action) {
 JavaParams javaParamsReducer(JavaParams params, action) {
   if (action is SelectJavaModifierAction) {
     return params.clone(fieldModifier: action.modifier);
-  } else if (action is SelectJavaFieldStyleAction) {
+  } else if (action is SelectJavaStyleAction) {
     return params.clone(fieldStyle: action.style);
   }
   return params;
@@ -27,12 +27,9 @@ JavaParams javaParamsReducer(JavaParams params, action) {
 
 KotlinParams kotlinParamsReducer(KotlinParams params, action) {
   if (action is SelectKotlinModifierAction) {
-    return KotlinParams(
-      fieldModifier: action.modifier,
-      fieldStyle: params.fieldStyle,
-      prefix: params.prefix,
-      postfix: params.postfix,
-    );
+    return params.clone(fieldModifier: action.modifier);
+  } else if (action is SelectKotlinStyleAction) {
+    return params.clone(fieldStyle: action.style);
   }
   return params;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:layout_convert/app_state.dart';
+import 'package:layout_convert/middleware.dart';
 import 'package:layout_convert/presentation/header.dart';
 import 'package:layout_convert/presentation/text.dart';
 import 'package:layout_convert/reducers.dart';
@@ -8,12 +9,15 @@ import 'package:redux/redux.dart';
 import 'models.dart';
 
 void main() {
-  final store = Store<AppState>(convertReducer,
-      initialState: AppState(
-        language: Language.java,
-        javaParams: JavaParams(),
-        kotlinParams: KotlinParams(),
-      ));
+  final store = Store<AppState>(
+    convertReducer,
+    initialState: AppState(
+      language: Language.java,
+      javaParams: JavaParams(),
+      kotlinParams: KotlinParams(),
+    ),
+    middleware: [handleTypesMiddleware]
+  );
 
   runApp(MyApp(store));
 }

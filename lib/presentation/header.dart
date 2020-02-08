@@ -10,7 +10,6 @@ import 'package:layout_convert/presentation/chooser.dart';
 import 'package:layout_convert/presentation/text.dart';
 import 'package:layout_convert/selectors.dart';
 
-
 class Header extends StatelessWidget {
   static List<Option<JavaAccessModifier>> accessModifiersOptions = [
     Option(value: JavaAccessModifier.public, name: "public"),
@@ -71,8 +70,8 @@ class Header extends StatelessWidget {
           ),
         ),
         VariantChooserContainer<VariableStyle>(
-          variantSelector: javaFieldStyleSelector,
-          eventFactory: (value) => SelectJavaFieldStyleAction(value),
+          variantSelector: fieldStyleSelector,
+          eventFactory: (value) => SelectFieldStyleAction(value),
           builder: (context, value, callback) => VariantChooser(
             title: "Code field name style",
             groupValue: value,

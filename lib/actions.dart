@@ -18,9 +18,19 @@ class SelectKotlinModifierAction {
   SelectKotlinModifierAction(this.modifier);
 }
 
-class SelectJavaFieldStyleAction {
+class SelectFieldStyleAction {
   final VariableStyle style;
-  SelectJavaFieldStyleAction(this.style);
+  SelectFieldStyleAction(this.style);
+}
+
+class SelectJavaStyleAction {
+  final VariableStyle style;
+  SelectJavaStyleAction(this.style);
+}
+
+class SelectKotlinStyleAction {
+  final VariableStyle style;
+  SelectKotlinStyleAction(this.style);
 }
 
 class UpdatePrefixAction {
