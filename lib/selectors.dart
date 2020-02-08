@@ -1,10 +1,12 @@
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-
 import 'app_state.dart';
 import 'models.dart';
 
-typedef Selector<R> = R Function(Store<AppState> state);
+typedef Selector<R> = R Function(AppState state);
 
-Language languageSelector(Store<AppState> store) => store.state.language;
+Language languageSelector(AppState state) => state.language;
 
+JavaAccessModifier javaAccessModifierSelector(AppState state) =>
+    state.javaParams.fieldModifier;
+
+KotlinAccessModifier kotlinAccessModifierSelector(AppState state) =>
+    state.kotlinParams.fieldModifier;

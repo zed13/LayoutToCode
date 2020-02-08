@@ -18,6 +18,22 @@ class JavaParams {
     this.prefix = "",
     this.postfix = "View",
   });
+
+  bool operator ==(o) =>
+      o is JavaParams &&
+      fieldModifier == o.fieldModifier &&
+      fieldStyle == o.fieldStyle &&
+      prefix == o.prefix &&
+      postfix == o.postfix;
+
+  int get hashCode {
+    var hashCode = 1;
+    hashCode = 31 * hashCode + fieldModifier.hashCode;
+    hashCode = 31 * hashCode + fieldStyle.hashCode;
+    hashCode = 31 * hashCode + prefix.hashCode;
+    hashCode = 31 * hashCode + postfix.hashCode;
+    return hashCode;
+  }
 }
 
 class KotlinParams {
@@ -32,4 +48,20 @@ class KotlinParams {
     this.prefix = "",
     this.postfix = "View",
   });
+
+  bool operator ==(o) =>
+      o is KotlinParams &&
+      fieldModifier == o.fieldModifier &&
+      fieldStyle == o.fieldStyle &&
+      prefix == o.prefix &&
+      postfix == o.postfix;
+
+  int get hashCode {
+    var hashCode = 1;
+    hashCode = 31 * hashCode + fieldModifier.hashCode;
+    hashCode = 31 * hashCode + fieldStyle.hashCode;
+    hashCode = 31 * hashCode + prefix.hashCode;
+    hashCode = 31 * hashCode + postfix.hashCode;
+    return hashCode;
+  }
 }

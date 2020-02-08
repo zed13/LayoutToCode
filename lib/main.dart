@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:layout_convert/actions.dart';
 import 'package:layout_convert/app_state.dart';
-import 'package:layout_convert/redusers.dart';
+import 'package:layout_convert/containers/language_container.dart';
+import 'package:layout_convert/reducers.dart';
+import 'package:layout_convert/selectors.dart';
 import 'package:redux/redux.dart';
+import 'containers/modifier_containers.dart';
 import 'models.dart';
 import 'presentation/chooser.dart';
 
@@ -132,65 +135,50 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return StoreBuilder<AppState>(
-      builder: (context, store) => Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Display1("Layout Convert"),
-              ButtonsBar(),
-            ],
-          ),
-          StoreConnector<AppState, Language>(
-            converter: (store) => store.state.language,
-            builder: (context, lang) => Row(
-              children: <Widget>[
-                Visibility(
-                  visible: lang == Language.java,
-                  child: StoreConnector<AppState, JavaAccessModifier>(
-                    converter: (store) => store.state.javaParams.fieldModifier,
-                    builder: (builder, modifier) => VariantChooser(
-                      title: "Access modifier",
-                      groupValue: modifier,
-                      options: accessModifiersOptions,
-                      onChanged: (value) =>
-                          store.dispatch(SelectJavaModifierAction(value)),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: lang == Language.kotlin,
-                  child: StoreConnector<AppState, KotlinAccessModifier>(
-                    converter: (store) =>
-                        store.state.kotlinParams.fieldModifier,
-                    builder: (context, modifier) => VariantChooser(
-                      title: "Acess modifier",
-                      groupValue: modifier,
-                      options: kotlinAccessModifiersOptions,
-                      onChanged: (value) =>
-                          store.dispatch(SelectKotlinModifierAction(value)),
-                    ),
-                  ),
-                ),
-                VariantChooser(
-                  title: "Code field name style",
-                  groupValue: VariableStyle.lowerCamelCase,
-                  options: variableStyleOptions,
-                  onChanged: (value) =>
-                      store.dispatch(SelectFieldStyleAction(value)),
-                ),
-              ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Display1("Layout Convert"),
+            ButtonsBar(),
+          ],
+        ),
+        LanguageAwareContainer(
+          targetLanguage: Language.java,
+          child: JavaAccessModifierContainer(
+            builder: (builder, modifier, callback) => VariantChooser(
+              title: "Access modifier",
+              groupValue: modifier,
+              options: accessModifiersOptions,
+              onChanged: callback,
             ),
           ),
-          Additions(),
-          RaisedButton(
-            onPressed: () {},
-            child: Text("CONVERT"),
-          )
-        ],
-      ),
+        ),
+        LanguageAwareContainer(
+          targetLanguage: Language.kotlin,
+          child: KotlinAccessModifierContainer(
+            builder: (context, modifier, callback) => VariantChooser(
+              title: "Acess modifier",
+              groupValue: modifier,
+              options: kotlinAccessModifiersOptions,
+              onChanged: callback,
+            ),
+          ),
+        ),
+        VariantChooser(
+          title: "Code field name style",
+          groupValue: VariableStyle.lowerCamelCase,
+          options: variableStyleOptions,
+          onChanged: (value) {},
+        ),
+        Additions(),
+        RaisedButton(
+          onPressed: () {},
+          child: Text("CONVERT"),
+        )
+      ],
     );
   }
 }

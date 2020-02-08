@@ -6,21 +6,21 @@ import 'package:layout_convert/models.dart';
 import '../selectors.dart';
 
 class LanguageAwareContainer extends StatelessWidget {
-  final WidgetBuilder builder;
+  final Widget child;
   final Language targetLanguage;
 
   LanguageAwareContainer({
     Key key,
-    @required this.builder,
+    @required this.child,
     @required this.targetLanguage,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Language>(
-      converter: languageSelector,
+      converter: (store) => languageSelector(store.state),
       builder: (context, lang) => Visibility(
-        child: builder(context),
+        child: child,
         visible: targetLanguage == lang,
       ),
     );
