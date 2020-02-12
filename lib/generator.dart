@@ -2,16 +2,27 @@ import 'models.dart';
 import 'extractor.dart';
 import 'utils.dart';
 
-class Generator {
+class JavaGenerator {
   final JavaAccessModifier accessLevel;
-  final VariableStyle layoutIdStyle;
   final VariableStyle generatedVariableStyle;
   final String variablePrefix;
   final String variablePostfix;
   final String rootView;
 
-  Generator(this.accessLevel, this.layoutIdStyle, this.generatedVariableStyle,
-      this.variablePrefix, this.variablePostfix, this.rootView);
+  JavaGenerator(
+    this.accessLevel,
+    this.generatedVariableStyle,
+    this.variablePrefix,
+    this.variablePostfix,
+    this.rootView,
+  );
+
+  JavaGenerator.from(JavaParams params)
+      : accessLevel = params.fieldModifier,
+        generatedVariableStyle = params.fieldStyle,
+        variablePrefix = params.prefix,
+        variablePostfix = params.postfix,
+        rootView = "view";
 
   String generateVariables(List<IdEntry> ids) {
     var builder = StringBuffer();
@@ -33,7 +44,57 @@ class Generator {
     var builder = StringBuffer();
     var findView = rootView == null ? "findViewById" : "$rootView.findViewById";
     for (var id in ids) {
-      builder.writeln("${_generateVariableName(id)} = $findView(R.id.${id.id});");
+      builder
+          .writeln("${_generateVariableName(id)} = $findView(R.id.${id.id});");
+    }
+    return builder.toString();
+  }
+}
+
+class KotlinGenerator {
+  final KotlinAccessModifier accessLevel;
+  final VariableStyle generatedVariableStyle;
+  final String variablePrefix;
+  final String variablePostfix;
+  final String rootView;
+
+  KotlinGenerator(
+    this.accessLevel,
+    this.generatedVariableStyle,
+    this.variablePrefix,
+    this.variablePostfix,
+    this.rootView,
+  );
+
+  KotlinGenerator.from(KotlinParams params)
+      : accessLevel = params.fieldModifier,
+        generatedVariableStyle = params.fieldStyle,
+        variablePrefix = params.prefix,
+        variablePostfix = params.postfix,
+        rootView = "view";
+
+  String generateVariables(List<IdEntry> ids) {
+    var builder = StringBuffer();
+
+    for (var id in ids) {
+      builder.writeln(
+          "${kotlinAccessName(accessLevel)} ${_generateVariableName(id)}: ${id.widgetName}?=null");
+    }
+
+    return builder.toString();
+  }
+
+  String _generateVariableName(IdEntry entry) {
+    return idToName(
+        entry.id, generatedVariableStyle, variablePrefix, variablePostfix);
+  }
+
+  String generateBindings(List<IdEntry> ids) {
+    var builder = StringBuffer();
+    var findView = rootView == null ? "findViewById" : "$rootView.findViewById";
+    for (var id in ids) {
+      builder
+          .writeln("${_generateVariableName(id)} = $findView(R.id.${id.id})");
     }
     return builder.toString();
   }
@@ -49,6 +110,19 @@ String javaAccessName(JavaAccessModifier accessLevel) {
       return "private";
     default:
       return "";
+  }
+}
+
+String kotlinAccessName(KotlinAccessModifier accessLevel) {
+  switch (accessLevel) {
+    case KotlinAccessModifier.public:
+      return "";
+    case KotlinAccessModifier.protected:
+      return "protected";
+    case KotlinAccessModifier.private:
+      return "private";
+    case KotlinAccessModifier.internal:
+      return "internal";
   }
 }
 

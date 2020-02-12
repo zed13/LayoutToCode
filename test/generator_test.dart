@@ -6,7 +6,7 @@ import 'package:layout_convert/extractor.dart';
 void main() {
   group("Generator test", () {
     test("generate fields", () {
-      var generator = gen.Generator(
+      var generator = gen.JavaGenerator(
         JavaAccessModifier.protected,
         VariableStyle.snakeCase,
         VariableStyle.upperCamelCase,

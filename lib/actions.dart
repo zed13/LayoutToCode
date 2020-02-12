@@ -49,3 +49,24 @@ class UpdateKotlinPostfixAction {
   final String postfix;
   UpdateKotlinPostfixAction(this.postfix);
 }
+
+
+// Editor actions
+class UpdateLayoutXmlAction {
+  final String layoutXml;
+  UpdateLayoutXmlAction(this.layoutXml);
+}
+
+class UpdateGeneratedFieldsAction {
+  final String fields;
+  UpdateGeneratedFieldsAction(this.fields);
+}
+
+class UpdateGeneratedBindingsAction {
+  final String bindings;
+  UpdateGeneratedBindingsAction(this.bindings);
+}
+
+// Convert action
+
+class Convert {}

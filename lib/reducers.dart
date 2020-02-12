@@ -6,6 +6,10 @@ AppState convertReducer(AppState state, action) => AppState(
       language: languageReducer(state.language, action),
       javaParams: javaParamsReducer(state.javaParams, action),
       kotlinParams: kotlinParamsReducer(state.kotlinParams, action),
+      layoutXml: layoutXmlReducer(state.layoutXml, action),
+      generatedFields: generatedFieldsReducer(state.generatedFields, action),
+      generatedBindings:
+          generatedBindingsReducer(state.generatedBindings, action),
     );
 
 Language languageReducer(Language language, action) {
@@ -40,4 +44,25 @@ KotlinParams kotlinParamsReducer(KotlinParams params, action) {
     return params.clone(postfix: action.postfix);
   }
   return params;
+}
+
+String layoutXmlReducer(String layoutXml, action) {
+  if (action is UpdateLayoutXmlAction) {
+    return action.layoutXml;
+  }
+  return layoutXml;
+}
+
+String generatedFieldsReducer(String generatedFields, action) {
+  if (action is UpdateGeneratedFieldsAction) {
+    return action.fields;
+  }
+  return generatedFields;
+}
+
+String generatedBindingsReducer(String generatedBindings, action) {
+  if (action is UpdateGeneratedBindingsAction) {
+    return action.bindings;
+  }
+  return generatedBindings;
 }
