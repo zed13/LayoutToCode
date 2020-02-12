@@ -16,7 +16,7 @@ void main() {
       javaParams: JavaParams(),
       kotlinParams: KotlinParams(),
     ),
-    middleware: [handleTypesMiddleware]
+    middleware: [],
   );
 
   runApp(MyApp(store));

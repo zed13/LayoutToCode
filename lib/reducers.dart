@@ -21,6 +21,10 @@ JavaParams javaParamsReducer(JavaParams params, action) {
     return params.clone(fieldModifier: action.modifier);
   } else if (action is SelectJavaStyleAction) {
     return params.clone(fieldStyle: action.style);
+  } else if (action is UpdateJavaPrefixAction) {
+    return params.clone(prefix: action.prefix);
+  } else if (action is UpdateJavaPostfixAction) {
+    return params.clone(postfix: action.postfix);
   }
   return params;
 }
@@ -30,6 +34,10 @@ KotlinParams kotlinParamsReducer(KotlinParams params, action) {
     return params.clone(fieldModifier: action.modifier);
   } else if (action is SelectKotlinStyleAction) {
     return params.clone(fieldStyle: action.style);
+  } else if (action is UpdateKotlinPrefixAction) {
+    return params.clone(prefix: action.prefix);
+  } else if (action is UpdateKotlinPostfixAction) {
+    return params.clone(postfix: action.postfix);
   }
   return params;
 }

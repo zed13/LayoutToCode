@@ -7,10 +7,10 @@ class VariantChooser<T> extends StatelessWidget {
   final ValueChanged<T> onChanged;
 
   VariantChooser({
-    this.title,
-    this.groupValue,
-    this.options,
-    this.onChanged,
+    @required this.title,
+    @required this.groupValue,
+    @required this.options,
+    @required this.onChanged,
   });
 
   @override

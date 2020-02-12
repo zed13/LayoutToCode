@@ -1,16 +1,23 @@
 import 'models.dart';
 
-
 class ChangeLanguageAction {
   final Language language;
   ChangeLanguageAction(this.language);
 }
 
-
-
 class SelectJavaModifierAction {
   final JavaAccessModifier modifier;
   SelectJavaModifierAction(this.modifier);
+}
+
+class UpdateJavaPrefixAction {
+  final String prefix;
+  UpdateJavaPrefixAction(this.prefix);
+}
+
+class UpdateJavaPostfixAction {
+  final String postfix;
+  UpdateJavaPostfixAction(this.postfix);
 }
 
 class SelectKotlinModifierAction {
@@ -33,12 +40,12 @@ class SelectKotlinStyleAction {
   SelectKotlinStyleAction(this.style);
 }
 
-class UpdatePrefixAction {
+class UpdateKotlinPrefixAction {
   final String prefix;
-  UpdatePrefixAction(this.prefix);
+  UpdateKotlinPrefixAction(this.prefix);
 }
 
-class UpdatePostfixAction {
+class UpdateKotlinPostfixAction {
   final String postfix;
-  UpdatePostfixAction(this.postfix);
+  UpdateKotlinPostfixAction(this.postfix);
 }
