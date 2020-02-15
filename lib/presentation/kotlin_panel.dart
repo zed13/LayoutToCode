@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:layout_convert/base.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/additions.dart';
 import 'package:layout_convert/presentation/chooser.dart';
 import 'package:layout_convert/view_model.dart';
 
-class KotlinPanel extends StatelessWidget {
+class KotlinPanel extends StatefulWidget {
+  final ViewModel viewModel;
+
+  KotlinPanel({
+    Key key,
+    @required this.viewModel,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _KotlinPanelState(viewModel);
+}
+
+class _KotlinPanelState extends RxState<KotlinPanel> {
   static List<Option<VariableStyle>> _variableStyleOptions = [
     Option(value: VariableStyle.snakeCase, name: "snake case"),
     Option(value: VariableStyle.lowerCamelCase, name: "lower camel case"),
@@ -18,28 +31,16 @@ class KotlinPanel extends StatelessWidget {
     Option(value: KotlinAccessModifier.internal, name: "internal"),
   ];
 
-  final ViewModel viewModel;
-  final KotlinAccessModifier currentModifier;
-  final ValueChanged<KotlinAccessModifier> onModifierChanged;
-  final VariableStyle fieldStyle;
-  final ValueChanged<VariableStyle> onFieldStyleChanged;
-  final String prefix;
-  final ValueChanged<String> onPrefixChanged;
-  final String postfix;
-  final ValueChanged<String> onPostfixChanged;
+  final ViewModel vm;
 
-  KotlinPanel({
-    Key key,
-    @required this.viewModel,
-    @required this.currentModifier,
-    @required this.onModifierChanged,
-    @required this.fieldStyle,
-    @required this.onFieldStyleChanged,
-    @required this.prefix,
-    @required this.onPrefixChanged,
-    @required this.postfix,
-    @required this.onPostfixChanged,
-  }) : super(key: key);
+  _KotlinPanelState(this.vm);
+
+  @override
+  void initState() {
+    bind(vm.kotlinAccessModifierStream);
+    bind(vm.kotilnFieldStyleStream);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +48,21 @@ class KotlinPanel extends StatelessWidget {
       children: <Widget>[
         VariantChooser<KotlinAccessModifier>(
           title: "Field modifier",
-          groupValue: currentModifier,
+          groupValue: vm.kotlinAccessModifier,
           options: _kotlinAccessModifiersOptions,
-          onChanged: onModifierChanged,
+          onChanged: (value) {
+            vm.kotlinAccessModifier = value;
+          },
         ),
         VariantChooser<VariableStyle>(
           title: "Field style",
-          groupValue: fieldStyle,
+          groupValue: vm.kotlinFieldStyle,
           options: _variableStyleOptions,
-          onChanged: onFieldStyleChanged,
+          onChanged: (value) {
+            vm.kotlinFieldStyle = value;
+          },
         ),
-        Additions(viewModel: viewModel),
+        Additions(viewModel: vm),
       ],
     );
   }

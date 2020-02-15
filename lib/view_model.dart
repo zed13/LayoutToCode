@@ -38,11 +38,14 @@ class ViewModel {
 
   set javaAccessModifier(JavaAccessModifier modifier) =>
       _javaAccessModifierController.add(modifier);
+  JavaAccessModifier get javaAccessModifier =>
+      _javaAccessModifierController.value;
   Stream<JavaAccessModifier> get javaAccessModifierStream =>
       _javaAccessModifierController.stream;
 
   set javaFieldStyle(VariableStyle style) =>
       _javaFieldStyleController.add(style);
+  VariableStyle get javaFieldStyle => _javaFieldStyleController.value;
   Stream<VariableStyle> get javaFieldStyleStream =>
       _javaFieldStyleController.stream;
 
@@ -50,11 +53,13 @@ class ViewModel {
 
   set kotlinAccessModifier(KotlinAccessModifier modifier) =>
       _kotlinAccessModifier.add(modifier);
+  KotlinAccessModifier get kotlinAccessModifier => _kotlinAccessModifier.value;
   Stream<KotlinAccessModifier> get kotlinAccessModifierStream =>
       _kotlinAccessModifier.stream;
 
   set kotlinFieldStyle(VariableStyle style) =>
       _kotlinFieldStyleController.add(style);
+  VariableStyle get kotlinFieldStyle => _kotlinFieldStyleController.value;
   Stream<VariableStyle> get kotilnFieldStyleStream =>
       _kotlinFieldStyleController.stream;
 

@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:layout_convert/base.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/additions.dart';
 import 'package:layout_convert/presentation/chooser.dart';
 import 'package:layout_convert/view_model.dart';
 
-class JavaPanel extends StatelessWidget {
+class JavaPanel extends StatefulWidget {
+  final ViewModel viewModel;
+
+  JavaPanel({
+    Key key,
+    @required this.viewModel,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _JpanelState(viewModel);
+}
+
+class _JpanelState extends RxState<JavaPanel> {
+  final ViewModel vm;
+
+  _JpanelState(this.vm);
+
   static List<Option<JavaAccessModifier>> _accessModifiersOptions = [
     Option(value: JavaAccessModifier.public, name: "public"),
     Option(value: JavaAccessModifier.protected, name: "protected"),
@@ -18,28 +35,12 @@ class JavaPanel extends StatelessWidget {
     Option(value: VariableStyle.upperCamelCase, name: "upper camel case")
   ];
 
-  final ViewModel viewModel;
-  final JavaAccessModifier currentModifier;
-  final ValueChanged<JavaAccessModifier> onModifierChanged;
-  final VariableStyle fieldStyle;
-  final ValueChanged<VariableStyle> onFieldStyleChanged;
-  final String prefix;
-  final ValueChanged<String> onPrefixChanged;
-  final String postfix;
-  final ValueChanged<String> onPostfixChanged;
-
-  JavaPanel({
-    Key key,
-    @required this.viewModel,
-    @required this.currentModifier,
-    @required this.onModifierChanged,
-    @required this.fieldStyle,
-    @required this.onFieldStyleChanged,
-    @required this.prefix,
-    @required this.onPrefixChanged,
-    @required this.postfix,
-    @required this.onPostfixChanged,
-  }) : super(key: key);
+  @override
+  void initState() {
+    bind(vm.javaFieldStyleStream);
+    bind(vm.javaAccessModifierStream);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +48,21 @@ class JavaPanel extends StatelessWidget {
       children: <Widget>[
         VariantChooser<JavaAccessModifier>(
           title: "Field modifier",
-          groupValue: currentModifier,
+          groupValue: vm.javaAccessModifier,
           options: _accessModifiersOptions,
-          onChanged: onModifierChanged,
+          onChanged: (value) {
+            vm.javaAccessModifier = value;
+          },
         ),
         VariantChooser<VariableStyle>(
           title: "Field style",
-          groupValue: fieldStyle,
+          groupValue: vm.javaFieldStyle,
           options: _variableStyleOptions,
-          onChanged: onFieldStyleChanged,
+          onChanged: (value) {
+            vm.javaFieldStyle = value;
+          },
         ),
-        Additions(viewModel: viewModel),
+        Additions(viewModel: vm),
       ],
     );
   }
