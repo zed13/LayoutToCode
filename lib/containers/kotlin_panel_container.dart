@@ -4,14 +4,21 @@ import 'package:layout_convert/actions.dart';
 import 'package:layout_convert/app_state.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/kotlin_panel.dart';
+import 'package:layout_convert/view_model.dart';
 import 'package:redux/redux.dart';
 
 class KotlinPanelContainer extends StatelessWidget {
+
+  final ViewModel viewModel;
+
+  KotlinPanelContainer({@required this.viewModel});
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _ViewModel>(
       converter: (store) => _ViewModel.from(store),
       builder: (context, vm) => KotlinPanel(
+        viewModel: viewModel,
         currentModifier: vm.currentModifier,
         onModifierChanged: vm.onModifierChanged,
         fieldStyle: vm.fieldStyle,

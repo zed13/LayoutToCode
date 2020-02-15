@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:layout_convert/base.dart';
+import 'package:layout_convert/view_model.dart';
 
-class Additions extends StatelessWidget {
-  final String initialPrefix;
-  final String initialPostfix;
-  final ValueChanged<String> onPrefixChanged;
-  final ValueChanged<String> onPostfixChanged;
+class Additions extends StatefulWidget {
+  final ViewModel viewModel;
 
   Additions({
     Key key,
-    this.initialPrefix = "",
-    this.initialPostfix = "",
-    @required this.onPrefixChanged,
-    @required this.onPostfixChanged,
+    @required this.viewModel,
   }) : super(key: key);
 
-   @override
+  @override
+  State<StatefulWidget> createState() => _AdditionsState(viewModel);
+}
+
+class _AdditionsState extends RxState<Additions> {
+  final TextEditingController prefixController;
+  final TextEditingController postfixController;
+
+  _AdditionsState(ViewModel vm)
+      : prefixController = vm.prefixController,
+        postfixController = vm.postfixController;
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,14 +30,12 @@ class Additions extends StatelessWidget {
       children: <Widget>[
         Text("Additions", style: TextStyle(fontSize: 16)),
         _inputField(
-          value: initialPrefix,
-          onChanged: onPrefixChanged,
           labelText: "Prefix",
+          controller: prefixController,
         ),
         _inputField(
-          value: initialPostfix,
-          onChanged: onPostfixChanged,
           labelText: "Postfix",
+          controller: postfixController,
         )
       ],
     );
@@ -38,8 +44,7 @@ class Additions extends StatelessWidget {
 
 Widget _inputField({
   @required String labelText,
-  @required String value,
-  @required ValueChanged<String> onChanged,
+  @required TextEditingController controller,
 }) {
   return Container(
     padding: EdgeInsets.only(top: 16),
@@ -47,8 +52,7 @@ Widget _inputField({
       width: 200,
       height: 42,
       child: TextFormField(
-        initialValue: value,
-        onChanged: onChanged,
+        controller: controller,
         maxLines: 1,
         decoration: InputDecoration(
           border: OutlineInputBorder(),

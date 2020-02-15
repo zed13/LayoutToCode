@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/additions.dart';
 import 'package:layout_convert/presentation/chooser.dart';
+import 'package:layout_convert/view_model.dart';
 
 class JavaPanel extends StatelessWidget {
   static List<Option<JavaAccessModifier>> _accessModifiersOptions = [
@@ -17,6 +18,7 @@ class JavaPanel extends StatelessWidget {
     Option(value: VariableStyle.upperCamelCase, name: "upper camel case")
   ];
 
+  final ViewModel viewModel;
   final JavaAccessModifier currentModifier;
   final ValueChanged<JavaAccessModifier> onModifierChanged;
   final VariableStyle fieldStyle;
@@ -28,6 +30,7 @@ class JavaPanel extends StatelessWidget {
 
   JavaPanel({
     Key key,
+    @required this.viewModel,
     @required this.currentModifier,
     @required this.onModifierChanged,
     @required this.fieldStyle,
@@ -54,12 +57,7 @@ class JavaPanel extends StatelessWidget {
           options: _variableStyleOptions,
           onChanged: onFieldStyleChanged,
         ),
-        Additions(
-          initialPrefix: prefix,
-          onPrefixChanged: onPrefixChanged,
-          initialPostfix: postfix,
-          onPostfixChanged: onPostfixChanged,
-        ),
+        Additions(viewModel: viewModel),
       ],
     );
   }

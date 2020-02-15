@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/additions.dart';
 import 'package:layout_convert/presentation/chooser.dart';
+import 'package:layout_convert/view_model.dart';
 
 class KotlinPanel extends StatelessWidget {
   static List<Option<VariableStyle>> _variableStyleOptions = [
@@ -17,6 +18,7 @@ class KotlinPanel extends StatelessWidget {
     Option(value: KotlinAccessModifier.internal, name: "internal"),
   ];
 
+  final ViewModel viewModel;
   final KotlinAccessModifier currentModifier;
   final ValueChanged<KotlinAccessModifier> onModifierChanged;
   final VariableStyle fieldStyle;
@@ -28,6 +30,7 @@ class KotlinPanel extends StatelessWidget {
 
   KotlinPanel({
     Key key,
+    @required this.viewModel,
     @required this.currentModifier,
     @required this.onModifierChanged,
     @required this.fieldStyle,
@@ -54,12 +57,7 @@ class KotlinPanel extends StatelessWidget {
           options: _variableStyleOptions,
           onChanged: onFieldStyleChanged,
         ),
-        Additions(
-          initialPrefix: prefix,
-          onPrefixChanged: onPrefixChanged,
-          initialPostfix: postfix,
-          onPostfixChanged: onPostfixChanged,
-        ),
+        Additions(viewModel: viewModel),
       ],
     );
   }

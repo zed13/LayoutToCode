@@ -34,12 +34,12 @@ class Header extends StatelessWidget {
         LanguageAwareContainer(
           viewModel: viewModel,
           targetLanguage: Language.java,
-          builder: (context) => JavaPanelContainer(),
+          builder: (context) => JavaPanelContainer(viewModel: viewModel),
         ),
         LanguageAwareContainer(
           viewModel: viewModel,
           targetLanguage: Language.kotlin,
-          builder: (context) => KotlinPanelContainer(),
+          builder: (context) => KotlinPanelContainer(viewModel: viewModel),
         ),
         StoreConnector<AppState, VoidCallback>(
           converter: (store) => store.dispatch(Convert()),

@@ -16,8 +16,8 @@ class ViewModel {
       BehaviorSubject.seeded(JavaAccessModifier.public);
   final BehaviorSubject<VariableStyle> _javaFieldStyleController =
       BehaviorSubject.seeded(VariableStyle.lowerCamelCase);
-  final javaPrefixController = TextEditingController(text: "");
-  final javaPostfixController = TextEditingController(text: "View");
+  final _javaPrefixController = TextEditingController(text: "");
+  final _javaPostfixController = TextEditingController(text: "View");
 
   // Kotlin observables
 
@@ -25,8 +25,8 @@ class ViewModel {
       BehaviorSubject.seeded(KotlinAccessModifier.public);
   final BehaviorSubject<VariableStyle> _kotlinFieldStyleController =
       BehaviorSubject.seeded(VariableStyle.lowerCamelCase);
-  final kotlinPrefixController = TextEditingController(text: "");
-  final kotlinPostfixController = TextEditingController(text: "");
+  final _kotlinPrefixController = TextEditingController(text: "");
+  final _kotlinPostfixController = TextEditingController(text: "");
 
   // common setters and getters
 
@@ -58,17 +58,27 @@ class ViewModel {
   Stream<VariableStyle> get kotilnFieldStyleStream =>
       _kotlinFieldStyleController.stream;
 
+  // language controllers getters
+
+  TextEditingController get prefixController => language == Language.kotlin
+      ? _kotlinPrefixController
+      : _javaPrefixController;
+
+  TextEditingController get postfixController => language == Language.kotlin
+      ? _kotlinPostfixController
+      : _javaPostfixController;
+
   void dispose() {
     _language.close();
 
     _javaAccessModifierController.close();
     _javaFieldStyleController.close();
-    javaPrefixController.dispose();
-    javaPostfixController.dispose();
+    _javaPrefixController.dispose();
+    _javaPostfixController.dispose();
 
     _kotlinAccessModifier.close();
     _kotlinFieldStyleController.close();
-    kotlinPrefixController.dispose();
-    kotlinPostfixController.dispose();
+    _kotlinPrefixController.dispose();
+    _kotlinPostfixController.dispose();
   }
 }
