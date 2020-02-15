@@ -1,8 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:layout_convert/actions.dart';
-import 'package:layout_convert/app_state.dart';
 import 'package:layout_convert/containers/language_container.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/buttons_bar.dart';
@@ -41,15 +37,12 @@ class Header extends StatelessWidget {
           targetLanguage: Language.kotlin,
           builder: (context) => KotlinPanel(viewModel: viewModel),
         ),
-        StoreConnector<AppState, VoidCallback>(
-          converter: (store) => store.dispatch(Convert()),
-          builder: (context, action) => RaisedButton(
+         RaisedButton(
             onPressed: () {
-              action();
+              viewModel.convert();
             },
             child: Text("CONVERT"),
           ),
-        )
       ],
     );
   }

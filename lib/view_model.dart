@@ -86,4 +86,6 @@ class ViewModel {
     _kotlinPrefixController.dispose();
     _kotlinPostfixController.dispose();
   }
+
+  void convert() {}
 }
