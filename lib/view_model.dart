@@ -10,6 +10,10 @@ class ViewModel {
   final BehaviorSubject<Language> _language =
       BehaviorSubject.seeded(Language.java);
 
+  final layoutXmlController = TextEditingController(text: "");
+  final fieldsController = TextEditingController(text: "");
+  final bindingsController = TextEditingController(text: "");
+
   // Java observables
 
   final BehaviorSubject<JavaAccessModifier> _javaAccessModifierController =
@@ -87,5 +91,8 @@ class ViewModel {
     _kotlinPostfixController.dispose();
   }
 
-  void convert() {}
+  void convert() {
+    bindingsController.clear();
+    fieldsController.clear();
+  }
 }

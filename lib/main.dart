@@ -1,49 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:layout_convert/actions.dart';
-import 'package:layout_convert/app_state.dart';
-import 'package:layout_convert/middleware.dart';
 import 'package:layout_convert/presentation/header.dart';
 import 'package:layout_convert/presentation/text.dart';
-import 'package:layout_convert/reducers.dart';
 import 'package:layout_convert/view_model.dart';
-import 'package:redux/redux.dart';
-import 'models.dart';
 
 void main() {
-  final store = Store<AppState>(
-    convertReducer,
-    initialState: AppState(
-      language: Language.java,
-      javaParams: JavaParams(),
-      kotlinParams: KotlinParams(),
-      layoutXml: xml,
-    ),
-    middleware: [convertMiddleware],
-  );
-
-  runApp(MyApp(store));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Store<AppState> store;
-
-  MyApp(this.store, {Key key}) : super(key: key);
+  MyApp({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
-      store: store,
-      child: MaterialApp(
-        title: 'Layout Convert',
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.pink,
-          backgroundColor: Color.fromARGB(255, 48, 48, 48),
-          primaryColor: Colors.cyan,
-        ),
-        home: MainPage(title: 'Layout Convert'),
+    return MaterialApp(
+      title: 'Layout Convert',
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.pink,
+        backgroundColor: Color.fromARGB(255, 48, 48, 48),
+        primaryColor: Colors.cyan,
       ),
+      home: MainPage(title: 'Layout Convert'),
     );
   }
 }
@@ -58,7 +35,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   final ViewModel vm = ViewModel();
 
   @override
@@ -92,16 +68,13 @@ class _MainPageState extends State<MainPage> {
                       TitleText("XML Layout"),
                       Expanded(
                         flex: 1,
-                        child: StoreConnector<AppState, _LayoutViewModel>(
-                          converter: (store) => _LayoutViewModel.from(store),
-                          builder: (context, vm) => TextFormField(
-                            initialValue: vm.text,
-                            onChanged: vm.onLayoutChanged,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            minLines: 100,
-                            decoration:
-                                InputDecoration(border: OutlineInputBorder()),
+                        child: TextFormField(
+                          controller: vm.layoutXmlController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          minLines: 100,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
                           ),
                         ),
                       ),
@@ -116,31 +89,25 @@ class _MainPageState extends State<MainPage> {
                       TitleText("Field initialization"),
                       Expanded(
                         flex: 1,
-                        child: StoreConnector<AppState, String>(
-                          converter: (store) => store.state.generatedFields,
-                          builder: (context, text) => TextFormField(
-                              initialValue: text,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              minLines: 100,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                              )),
-                        ),
+                        child: TextFormField(
+                            controller: vm.fieldsController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            minLines: 100,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                            )),
                       ),
                       TitleText("View bindings"),
                       Expanded(
                         flex: 1,
-                        child: StoreConnector<AppState, String>(
-                          converter: (store) => store.state.generatedBindings,
-                          builder: (context, text) => TextFormField(
-                            initialValue: text,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            minLines: 100,
-                            decoration:
-                                InputDecoration(border: OutlineInputBorder()),
-                          ),
+                        child: TextFormField(
+                          controller: vm.bindingsController,
+                          keyboardType: TextInputType.multiline,
+                          maxLines: null,
+                          minLines: 100,
+                          decoration:
+                              InputDecoration(border: OutlineInputBorder()),
                         ),
                       )
                     ],
@@ -152,22 +119,6 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
     ));
-  }
-}
-
-class _LayoutViewModel {
-  final String text;
-  final ValueChanged<String> onLayoutChanged;
-
-  _LayoutViewModel({this.text, this.onLayoutChanged});
-
-  static _LayoutViewModel from(Store<AppState> store) {
-    return _LayoutViewModel(
-      text: store.state.layoutXml,
-      onLayoutChanged: (value) {
-        store.dispatch(UpdateLayoutXmlAction(value));
-      },
-    );
   }
 }
 
