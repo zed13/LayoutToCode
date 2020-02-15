@@ -2,7 +2,16 @@ import 'models.dart';
 import 'extractor.dart';
 import 'utils.dart';
 
-class JavaGenerator {
+abstract class Generator {
+  String generateVariables(List<IdEntry> ids);
+  String generateBindings(List<IdEntry> ids);
+
+  factory Generator.forKotlin(KotlinParams params) =>
+      KotlinGenerator.from(params);
+  factory Generator.forJava(JavaParams params) => JavaGenerator.from(params);
+}
+
+class JavaGenerator implements Generator {
   final JavaAccessModifier accessLevel;
   final VariableStyle generatedVariableStyle;
   final String variablePrefix;
@@ -24,12 +33,13 @@ class JavaGenerator {
         variablePostfix = params.postfix,
         rootView = "view";
 
+  @override
   String generateVariables(List<IdEntry> ids) {
     var builder = StringBuffer();
 
     for (var id in ids) {
       builder.writeln(
-          "${javaAccessName(accessLevel)} ${id.widgetName} ${_generateVariableName(id)}");
+          "${javaAccessName(accessLevel)} ${id.widgetName} ${_generateVariableName(id)};");
     }
 
     return builder.toString();
@@ -40,6 +50,7 @@ class JavaGenerator {
         entry.id, generatedVariableStyle, variablePrefix, variablePostfix);
   }
 
+  @override
   String generateBindings(List<IdEntry> ids) {
     var builder = StringBuffer();
     var findView = rootView == null ? "findViewById" : "$rootView.findViewById";
@@ -51,7 +62,7 @@ class JavaGenerator {
   }
 }
 
-class KotlinGenerator {
+class KotlinGenerator implements Generator {
   final KotlinAccessModifier accessLevel;
   final VariableStyle generatedVariableStyle;
   final String variablePrefix;
@@ -73,6 +84,7 @@ class KotlinGenerator {
         variablePostfix = params.postfix,
         rootView = "view";
 
+  @override
   String generateVariables(List<IdEntry> ids) {
     var builder = StringBuffer();
 
@@ -89,6 +101,7 @@ class KotlinGenerator {
         entry.id, generatedVariableStyle, variablePrefix, variablePostfix);
   }
 
+  @override
   String generateBindings(List<IdEntry> ids) {
     var builder = StringBuffer();
     var findView = rootView == null ? "findViewById" : "$rootView.findViewById";
@@ -123,6 +136,8 @@ String kotlinAccessName(KotlinAccessModifier accessLevel) {
       return "private";
     case KotlinAccessModifier.internal:
       return "internal";
+    default:
+      return "";
   }
 }
 

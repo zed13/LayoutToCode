@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:layout_convert/extractor.dart';
+import 'package:layout_convert/generator.dart';
 import 'package:layout_convert/models.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -91,8 +93,28 @@ class ViewModel {
     _kotlinPostfixController.dispose();
   }
 
-  void convert() {
-    bindingsController.clear();
-    fieldsController.clear();
+  void convert() async {
+    final ids =
+        extractIds(layoutXmlController.text).whereType<IdEntry>().toList();
+
+    Generator generator;
+
+    if (language == Language.kotlin) {
+      generator = Generator.forKotlin(KotlinParams(
+        fieldModifier: kotlinAccessModifier,
+        fieldStyle: kotlinFieldStyle,
+        prefix: _kotlinPrefixController.text,
+        postfix: _kotlinPostfixController.text,
+      ));
+    } else {
+      generator = Generator.forJava(JavaParams(
+        fieldModifier: javaAccessModifier,
+        fieldStyle: kotlinFieldStyle,
+        prefix: _javaPrefixController.text,
+        postfix: _javaPostfixController.text,
+      ));
+    }
+    bindingsController.text = generator.generateBindings(ids);
+    fieldsController.text = generator.generateVariables(ids);
   }
 }

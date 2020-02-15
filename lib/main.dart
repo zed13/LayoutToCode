@@ -50,7 +50,11 @@ class _MainPageState extends State<MainPage> {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           Header(viewModel: vm),
-          Divider(),
+          Divider(
+            thickness: 2,
+            indent: 16,
+            endIndent: 16,
+          ),
           Expanded(
             flex: 1,
             child: Row(
