@@ -1,28 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:layout_convert/app_state.dart';
+import 'package:layout_convert/base.dart';
 import 'package:layout_convert/models.dart';
+import 'package:layout_convert/view_model.dart';
 
-import '../selectors.dart';
 
-class LanguageAwareContainer extends StatelessWidget {
-  final Widget child;
+class LanguageAwareContainer extends StatefulWidget {
+  final ViewModel viewModel;
+  final WidgetBuilder builder;
   final Language targetLanguage;
 
   LanguageAwareContainer({
     Key key,
-    @required this.child,
+    @required this.viewModel,
+    @required this.builder,
     @required this.targetLanguage,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, Language>(
-      converter: (store) => languageSelector(store.state),
-      builder: (context, lang) => Visibility(
-        child: child,
-        visible: targetLanguage == lang,
-      ),
-    );
+  State<StatefulWidget> createState() {
+    return _LanguageAwareContainer(
+        viewModel,
+        targetLanguage,
+        builder,
+      );
   }
+}
+
+class _LanguageAwareContainer extends RxState<LanguageAwareContainer> {
+  final ViewModel vm;
+  final Language targetLanguage;
+  final WidgetBuilder builder;
+
+  _LanguageAwareContainer(
+    this.vm,
+    this.targetLanguage,
+    this.builder,
+  );
+
+  Language get language => vm.language;
+
+  @override
+  void initState() {
+    bind(vm.languageStream);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) => Visibility(
+        visible: language == targetLanguage,
+        child: builder(context),
+      );
 }

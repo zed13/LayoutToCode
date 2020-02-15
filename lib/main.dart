@@ -6,6 +6,7 @@ import 'package:layout_convert/middleware.dart';
 import 'package:layout_convert/presentation/header.dart';
 import 'package:layout_convert/presentation/text.dart';
 import 'package:layout_convert/reducers.dart';
+import 'package:layout_convert/view_model.dart';
 import 'package:redux/redux.dart';
 import 'models.dart';
 
@@ -57,6 +58,9 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+  final ViewModel vm = ViewModel();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -69,7 +73,7 @@ class _MainPageState extends State<MainPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Header(),
+          Header(viewModel: vm),
           Divider(),
           Expanded(
             flex: 1,

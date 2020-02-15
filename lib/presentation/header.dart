@@ -9,8 +9,16 @@ import 'package:layout_convert/containers/language_container.dart';
 import 'package:layout_convert/models.dart';
 import 'package:layout_convert/presentation/buttons_bar.dart';
 import 'package:layout_convert/presentation/text.dart';
+import 'package:layout_convert/view_model.dart';
 
 class Header extends StatelessWidget {
+  final ViewModel viewModel;
+
+  Header({
+    Key key,
+    @required this.viewModel,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -20,16 +28,18 @@ class Header extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Display1Text("Layout Convert"),
-            ButtonsBar(),
+            ButtonsBar(viewModel: viewModel),
           ],
         ),
         LanguageAwareContainer(
+          viewModel: viewModel,
           targetLanguage: Language.java,
-          child: JavaPanelContainer(),
+          builder: (context) => JavaPanelContainer(),
         ),
         LanguageAwareContainer(
+          viewModel: viewModel,
           targetLanguage: Language.kotlin,
-          child: KotlinPanelContainer(),
+          builder: (context) => KotlinPanelContainer(),
         ),
         StoreConnector<AppState, VoidCallback>(
           converter: (store) => store.dispatch(Convert()),
