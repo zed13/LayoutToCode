@@ -12,13 +12,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Colors.lightGreen;
     return MaterialApp(
       title: 'Layout Convert',
       theme: ThemeData(
         brightness: Brightness.dark,
-        primarySwatch: Colors.pink,
+        primarySwatch: primaryColor,
         backgroundColor: Color.fromARGB(255, 48, 48, 48),
-        primaryColor: Colors.cyan,
+        primaryColor: primaryColor,
+        accentColor: primaryColor,
+        toggleableActiveColor: primaryColor,
       ),
       home: MainPage(title: 'Layout Convert'),
     );
@@ -44,86 +47,105 @@ class _MainPageState extends State<MainPage> {
         body: SizedBox(
       height: size.height,
       width: size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Header(viewModel: vm),
-          Divider(
-            thickness: 2,
-            indent: 16,
-            endIndent: 16,
-          ),
-          Expanded(
-            flex: 1,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      TitleText("XML Layout"),
-                      Expanded(
-                        flex: 1,
-                        child: TextFormField(
-                          controller: vm.layoutXmlController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          minLines: 100,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TitleText("Field initialization"),
-                      Expanded(
-                        flex: 1,
-                        child: TextFormField(
-                            controller: vm.fieldsController,
+      child: Container(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Header(viewModel: vm),
+            Divider(thickness: 2),
+            divider(),
+            Expanded(
+              flex: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        TitleText("XML Layout"),
+                        divider(height: 8),
+                        Expanded(
+                          flex: 1,
+                          child: TextFormField(
+                            controller: vm.layoutXmlController,
                             keyboardType: TextInputType.multiline,
                             maxLines: null,
                             minLines: 100,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                            )),
-                      ),
-                      TitleText("View bindings"),
-                      Expanded(
-                        flex: 1,
-                        child: TextFormField(
-                          controller: vm.bindingsController,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: null,
-                          minLines: 100,
-                          decoration:
-                              InputDecoration(border: OutlineInputBorder()),
+                            ),
+                          ),
                         ),
-                      )
-                    ],
+                      ],
+                    ),
                   ),
-                )
-              ],
-            ),
-          )
-        ],
+                  verticalDivider(),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TitleText("Field initialization"),
+                        divider(height: 8),
+                        Expanded(
+                          flex: 1,
+                          child: TextFormField(
+                              controller: vm.fieldsController,
+                              keyboardType: TextInputType.multiline,
+                              maxLines: null,
+                              minLines: 100,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                              )),
+                        ),
+                        divider(),
+                        TitleText("View bindings"),
+                        divider(height: 8),
+                        Expanded(
+                          flex: 1,
+                          child: TextFormField(
+                            controller: vm.bindingsController,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            minLines: 100,
+                            decoration:
+                                InputDecoration(border: OutlineInputBorder()),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     ));
   }
+}
+
+VerticalDivider verticalDivider({double width = 24}) {
+  return VerticalDivider(
+    color: Colors.transparent,
+    width: width,
+  );
+}
+
+Divider divider({double height = 24}) {
+  return Divider(
+    color: Colors.transparent,
+    height: height,
+  );
 }
 
 const xml = '''

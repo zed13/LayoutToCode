@@ -18,6 +18,8 @@ class Display1Text extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(title, style: Theme.of(context).textTheme.display1);
+    return Text(title, style: Theme.of(context).textTheme.headline4);
   }
 }
+
+

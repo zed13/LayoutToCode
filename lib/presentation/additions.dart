@@ -24,20 +24,23 @@ class _AdditionsState extends RxState<Additions> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Text("Additions", style: TextStyle(fontSize: 16)),
-        _inputField(
-          labelText: "Prefix",
-          controller: prefixController,
-        ),
-        _inputField(
-          labelText: "Postfix",
-          controller: postfixController,
-        )
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, right: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text("Additions", style: TextStyle(fontSize: 16)),
+          _inputField(
+            labelText: "Prefix",
+            controller: prefixController,
+          ),
+          _inputField(
+            labelText: "Postfix",
+            controller: postfixController,
+          )
+        ],
+      ),
     );
   }
 }

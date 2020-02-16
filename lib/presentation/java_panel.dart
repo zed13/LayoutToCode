@@ -45,6 +45,7 @@ class _JpanelState extends RxState<JavaPanel> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         VariantChooser<JavaAccessModifier>(
           title: "Field modifier",

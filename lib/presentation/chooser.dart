@@ -15,12 +15,20 @@ class VariantChooser<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(title, style: TextStyle(fontSize: 16)),
-        ..._buildVariants()
-      ],
+    return Container(
+      padding: EdgeInsets.only(left: 12, right: 12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Text(title, style: TextStyle(fontSize: 16)),
+          ),
+          ..._buildVariants()
+        ],
+      ),
     );
   }
 

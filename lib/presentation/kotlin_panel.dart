@@ -45,6 +45,7 @@ class _KotlinPanelState extends RxState<KotlinPanel> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         VariantChooser<KotlinAccessModifier>(
           title: "Field modifier",

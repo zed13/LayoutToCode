@@ -18,10 +18,12 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Display1Text("Layout Convert"),
             ButtonsBar(viewModel: viewModel),
@@ -37,12 +39,13 @@ class Header extends StatelessWidget {
           targetLanguage: Language.kotlin,
           builder: (context) => KotlinPanel(viewModel: viewModel),
         ),
-         RaisedButton(
-            onPressed: () {
-              viewModel.convert();
-            },
-            child: Text("CONVERT"),
-          ),
+        RaisedButton(
+          padding: EdgeInsets.only(left: 48, top: 12, right: 48, bottom: 12),
+          onPressed: () {
+            viewModel.convert();
+          },
+          child: Text("CONVERT", style: Theme.of(context).textTheme.button),
+        ),
       ],
     );
   }
