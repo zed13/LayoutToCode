@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         primaryColor: primaryColor,
         accentColor: primaryColor,
         toggleableActiveColor: primaryColor,
+        cursorColor: primaryColor,
       ),
       home: MainPage(title: 'Layout Convert'),
     );
