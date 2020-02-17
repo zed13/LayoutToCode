@@ -25,6 +25,7 @@ class ViewModel {
       BehaviorSubject.seeded(VariableStyle.lowerCamelCase);
   final _javaPrefixController = TextEditingController(text: "");
   final _javaPostfixController = TextEditingController(text: "View");
+  final _javaParentViewController = TextEditingController(text: "rootView");
 
   // Kotlin observables
 
@@ -33,7 +34,8 @@ class ViewModel {
   final BehaviorSubject<VariableStyle> _kotlinFieldStyleController =
       BehaviorSubject.seeded(VariableStyle.lowerCamelCase);
   final _kotlinPrefixController = TextEditingController(text: "");
-  final _kotlinPostfixController = TextEditingController(text: "");
+  final _kotlinPostfixController = TextEditingController(text: "View");
+  final _kotlinParentViewController = TextEditingController(text: "rootView");
 
   // common setters and getters
 
@@ -80,18 +82,27 @@ class ViewModel {
       ? _kotlinPostfixController
       : _javaPostfixController;
 
+  TextEditingController get parentViewController => language == Language.kotlin
+      ? _kotlinParentViewController
+      : _javaParentViewController;
+
   void dispose() {
     _language.close();
+    layoutXmlController.dispose();
+    fieldsController.dispose();
+    bindingsController.dispose();
 
     _javaAccessModifierController.close();
     _javaFieldStyleController.close();
     _javaPrefixController.dispose();
     _javaPostfixController.dispose();
+    _javaParentViewController.dispose();
 
     _kotlinAccessModifier.close();
     _kotlinFieldStyleController.close();
     _kotlinPrefixController.dispose();
     _kotlinPostfixController.dispose();
+    _kotlinParentViewController.dispose();
   }
 
   void convert() async {
@@ -106,6 +117,7 @@ class ViewModel {
         fieldStyle: kotlinFieldStyle,
         prefix: _kotlinPrefixController.text,
         postfix: _kotlinPostfixController.text,
+        parentView: _kotlinParentViewController.text,
       ));
     } else {
       generator = Generator.forJava(JavaParams(
@@ -113,6 +125,7 @@ class ViewModel {
         fieldStyle: kotlinFieldStyle,
         prefix: _javaPrefixController.text,
         postfix: _javaPostfixController.text,
+        parentView: _javaParentViewController.text,
       ));
     }
     bindingsController.text = generator.generateBindings(ids);

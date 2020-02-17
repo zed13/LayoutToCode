@@ -31,7 +31,7 @@ class JavaGenerator implements Generator {
         generatedVariableStyle = params.fieldStyle,
         variablePrefix = params.prefix,
         variablePostfix = params.postfix,
-        rootView = "view";
+        rootView = params.parentView;
 
   @override
   String generateVariables(List<IdEntry> ids) {
@@ -53,7 +53,7 @@ class JavaGenerator implements Generator {
   @override
   String generateBindings(List<IdEntry> ids) {
     var builder = StringBuffer();
-    var findView = rootView == null ? "findViewById" : "$rootView.findViewById";
+    var findView = rootView == null || rootView.isEmpty ? "findViewById" : "$rootView.findViewById";
     for (var id in ids) {
       builder
           .writeln("${_generateVariableName(id)} = $findView(R.id.${id.id});");
@@ -82,7 +82,7 @@ class KotlinGenerator implements Generator {
         generatedVariableStyle = params.fieldStyle,
         variablePrefix = params.prefix,
         variablePostfix = params.postfix,
-        rootView = "view";
+        rootView = params.parentView;
 
   @override
   String generateVariables(List<IdEntry> ids) {
@@ -104,7 +104,7 @@ class KotlinGenerator implements Generator {
   @override
   String generateBindings(List<IdEntry> ids) {
     var builder = StringBuffer();
-    var findView = rootView == null ? "findViewById" : "$rootView.findViewById";
+    var findView = rootView == null || rootView.isEmpty ? "findViewById" : "$rootView.findViewById";
     for (var id in ids) {
       builder
           .writeln("${_generateVariableName(id)} = $findView(R.id.${id.id})");

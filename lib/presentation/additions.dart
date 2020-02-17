@@ -15,12 +15,9 @@ class Additions extends StatefulWidget {
 }
 
 class _AdditionsState extends RxState<Additions> {
-  final TextEditingController prefixController;
-  final TextEditingController postfixController;
+  final ViewModel vm;
 
-  _AdditionsState(ViewModel vm)
-      : prefixController = vm.prefixController,
-        postfixController = vm.postfixController;
+  _AdditionsState(this.vm);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +30,15 @@ class _AdditionsState extends RxState<Additions> {
           Text("Additions", style: TextStyle(fontSize: 16)),
           _inputField(
             labelText: "Prefix",
-            controller: prefixController,
+            controller: vm.prefixController,
           ),
           _inputField(
             labelText: "Postfix",
-            controller: postfixController,
+            controller: vm.postfixController,
+          ),
+          _inputField(
+            labelText: "Parent view",
+            controller: vm.parentViewController,
           )
         ],
       ),
