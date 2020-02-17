@@ -19,7 +19,7 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,12 +39,20 @@ class Header extends StatelessWidget {
           targetLanguage: Language.kotlin,
           builder: (context) => KotlinPanel(viewModel: viewModel),
         ),
-        RaisedButton(
-          padding: EdgeInsets.only(left: 48, top: 12, right: 48, bottom: 12),
-          onPressed: () {
-            viewModel.convert();
-          },
-          child: Text("CONVERT", style: Theme.of(context).textTheme.button),
+        Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: RaisedButton(
+            padding: EdgeInsets.only(
+              left: 48,
+              top: 12,
+              right: 48,
+              bottom: 12,
+            ),
+            onPressed: () {
+              viewModel.convert();
+            },
+            child: Text("CONVERT", style: Theme.of(context).textTheme.button),
+          ),
         ),
       ],
     );
