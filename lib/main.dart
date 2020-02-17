@@ -66,26 +66,9 @@ class _MainPageState extends State<MainPage> {
                 children: <Widget>[
                   Expanded(
                     flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        TitleText("XML Layout"),
-                        divider(height: 8),
-                        Expanded(
-                          flex: 1,
-                          child: TextFormField(
-                            controller: vm.layoutXmlController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            minLines: 100,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: CodeField(
+                      title: "Layout XML",
+                      fieldController: vm.layoutXmlController,
                     ),
                   ),
                   verticalDivider(),
@@ -93,33 +76,52 @@ class _MainPageState extends State<MainPage> {
                     flex: 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         TitleText("Field initialization"),
                         divider(height: 8),
                         Expanded(
                           flex: 1,
-                          child: TextFormField(
-                              controller: vm.fieldsController,
-                              keyboardType: TextInputType.multiline,
-                              maxLines: null,
-                              minLines: 100,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                              )),
+                          child: Stack(
+                            alignment: Alignment.topRight,
+                            children: <Widget>[
+                              TextFormField(
+                                controller: vm.fieldsController,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: null,
+                                minLines: 100,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.content_copy),
+                                onPressed: () => vm.copyFields(),
+                              )
+                            ],
+                          ),
                         ),
                         divider(),
                         TitleText("View bindings"),
                         divider(height: 8),
                         Expanded(
                           flex: 1,
-                          child: TextFormField(
-                            controller: vm.bindingsController,
-                            keyboardType: TextInputType.multiline,
-                            maxLines: null,
-                            minLines: 100,
-                            decoration:
-                                InputDecoration(border: OutlineInputBorder()),
-                          ),
+                          child: Stack(
+                              alignment: Alignment.topRight,
+                              children: <Widget>[
+                                TextFormField(
+                                  controller: vm.bindingsController,
+                                  keyboardType: TextInputType.multiline,
+                                  maxLines: null,
+                                  minLines: 100,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder()),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.content_copy),
+                                  onPressed: () => vm.copyBindings(),
+                                ),
+                              ]),
                         )
                       ],
                     ),
@@ -131,6 +133,46 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     ));
+  }
+}
+
+class CodeField extends StatelessWidget {
+  final String title;
+  final TextEditingController fieldController;
+  final VoidCallback copyCallback;
+  final bool isCopyEnabled;
+
+  const CodeField({
+    Key key,
+    @required this.title,
+    @required this.fieldController,
+    this.copyCallback,
+  })  : isCopyEnabled = copyCallback != null,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        TitleText(title),
+        divider(height: 8),
+        Expanded(
+          flex: 1,
+          child: TextFormField(
+            controller: fieldController,
+            keyboardType: TextInputType.multiline,
+            maxLines: null,
+            minLines: 100,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 

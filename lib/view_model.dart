@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:layout_convert/extractor.dart';
 import 'package:layout_convert/generator.dart';
 import 'package:layout_convert/models.dart';
@@ -116,5 +117,13 @@ class ViewModel {
     }
     bindingsController.text = generator.generateBindings(ids);
     fieldsController.text = generator.generateVariables(ids);
+  }
+
+  copyBindings() {
+    Clipboard.setData(ClipboardData(text: bindingsController.text));
+  }
+
+  copyFields() {
+    Clipboard.setData(ClipboardData(text: fieldsController.text));
   }
 }
