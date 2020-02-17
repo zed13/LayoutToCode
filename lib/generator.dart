@@ -53,7 +53,9 @@ class JavaGenerator implements Generator {
   @override
   String generateBindings(List<IdEntry> ids) {
     var builder = StringBuffer();
-    var findView = rootView == null || rootView.isEmpty ? "findViewById" : "$rootView.findViewById";
+    var findView = rootView == null || rootView.isEmpty
+        ? "findViewById"
+        : "$rootView.findViewById";
     for (var id in ids) {
       builder
           .writeln("${_generateVariableName(id)} = $findView(R.id.${id.id});");
@@ -104,7 +106,9 @@ class KotlinGenerator implements Generator {
   @override
   String generateBindings(List<IdEntry> ids) {
     var builder = StringBuffer();
-    var findView = rootView == null || rootView.isEmpty ? "findViewById" : "$rootView.findViewById";
+    var findView = rootView == null || rootView.isEmpty
+        ? "findViewById"
+        : "$rootView.findViewById";
     for (var id in ids) {
       builder
           .writeln("${_generateVariableName(id)} = $findView(R.id.${id.id})");
@@ -142,11 +146,22 @@ String kotlinAccessName(KotlinAccessModifier accessLevel) {
 }
 
 String idToName(
-    String widgetId, VariableStyle style, String prefix, String postfix) {
-  return prefix + generateName(style, nameToParts(widgetId)) + postfix;
+  String widgetId,
+  VariableStyle style,
+  String prefix,
+  String postfix,
+) {
+  String nameWithoutPrefix =
+      generateName(style, nameToParts(widgetId)) + postfix;
+  return prefix.isEmpty
+      ? nameWithoutPrefix
+      : prefix + nameWithoutPrefix.capitalize();
 }
 
-String generateName(VariableStyle style, List<String> parts) {
+String generateName(
+  VariableStyle style,
+  List<String> parts,
+) {
   if (parts.isEmpty) {
     return "";
   }
