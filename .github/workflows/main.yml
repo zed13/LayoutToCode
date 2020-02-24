@@ -30,8 +30,8 @@ jobs:
     - name: Stage changes
       run: git add .
     - name: Commit and push to gh-pages
-      uses: Automattic/action-commit-to-branch@master
+      uses: github-actions-x/commit@v2.4
       with: 
-        branch: gh-pages
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
+        github-token: ${{ secrets.GITHUBTOKEN }} 
+        push-branch: gh-pages
+        commit-message: Publish site to github pages
