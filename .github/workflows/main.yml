@@ -35,3 +35,4 @@ jobs:
         github-token: ${{ secrets.GITHUBTOKEN }} 
         push-branch: gh-pages
         commit-message: Publish site to github pages
+        rebase: true
