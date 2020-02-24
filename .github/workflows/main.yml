@@ -27,12 +27,15 @@ jobs:
         flutter build web --release
     - name: Copy site to root
       run: cp -R -v build/web/* ./
-    - name: Stage changes
-      run: git add .
-    - name: Commit and push to gh-pages
-      uses: github-actions-x/commit@v2.4
+    - name: Stage and commit changes
+      run: |
+        git config user.name "Publisher"
+        git config user.email "publisher@github.com"
+        git add .
+        git commit -m "Publish web app to Github Pages"
+    - name: Push to gh-pages
+      uses: ad-m/github-push-action@v0.5.0
       with: 
-        github-token: ${{ secrets.GITHUBTOKEN }} 
-        push-branch: gh-pages
-        commit-message: Publish site to github pages
-        rebase: true
+        github_token: ${{ secrets.GITHUBTOKEN }} 
+        branch: gh-pages
+        force: true
