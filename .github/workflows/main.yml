@@ -1,0 +1,37 @@
+name: Build site release
+
+on: 
+  push:
+    branches:
+    - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: publishing
+    - name: Flutter action
+      uses: subosito/flutter-action@v1.1.1
+    - name: Set up flutter for web
+      run: |
+        flutter channel beta
+        flutter upgrade
+        flutter config --enable-web
+    - name: Download dependencies and build project
+      run: |
+        flutter pub get
+        flutter build web --release
+    - name: Copy site to root
+      run: cp -R -v build/web/* ./
+    - name: Stage changes
+      run: git add .
+    - name: Commit and push to publishing
+      uses: Automattic/action-commit-to-branch@master
+      with: 
+        branch: gh-pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUBTOKEN }}
