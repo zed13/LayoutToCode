@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:layout_convert/presentation/header.dart';
 import 'package:layout_convert/presentation/text.dart';
+import 'package:layout_convert/repositories.dart';
 import 'package:layout_convert/view_model.dart';
 
 void main() {
@@ -39,7 +40,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final ViewModel vm = ViewModel();
+  final ViewModel vm = ViewModel(SettingsRepository());
 
   @override
   Widget build(BuildContext context) {

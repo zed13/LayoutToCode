@@ -5,13 +5,62 @@ import 'package:flutter/services.dart';
 import 'package:layout_convert/extractor.dart';
 import 'package:layout_convert/generator.dart';
 import 'package:layout_convert/models.dart';
+import 'package:layout_convert/repositories.dart';
 import 'package:rxdart/rxdart.dart';
 
+import 'base.dart';
+
 class ViewModel {
+  final SettingsRepository repo;
+
   // Language observables
 
-  final BehaviorSubject<Language> _language =
-      BehaviorSubject.seeded(Language.java);
+  ViewModel(this.repo)
+      : _language = Subjects.behaviorSubject(
+          repo.language,
+          onChange: (value) => repo.language = value,
+        ),
+        _javaAccessModifierController = Subjects.behaviorSubject(
+          repo.javaParams.fieldModifier,
+          onChange: (value) => repo.setJavaParams(fieldModifier: value),
+        ),
+        _javaFieldStyleController = Subjects.behaviorSubject(
+          repo.javaParams.fieldStyle,
+          onChange: (value) => repo.setJavaParams(fieldStyle: value),
+        ),
+        _javaPrefixController = Controllers.textController(
+          text: repo.javaParams.prefix,
+          onChanged: (value) => repo.setJavaParams(prefix: value),
+        ),
+        _javaPostfixController = Controllers.textController(
+          text: repo.javaParams.prefix,
+          onChanged: (value) => repo.setJavaParams(postfix: value),
+        ),
+        _javaParentViewController = Controllers.textController(
+            text: repo.javaParams.parentView,
+            onChanged: (value) => repo.setJavaParams(parentView: value)),
+        _kotlinAccessModifier = Subjects.behaviorSubject(
+          repo.kotlinParams.fieldModifier,
+          onChange: (value) => repo.setKotlinParams(fieldModifier: value),
+        ),
+        _kotlinFieldStyleController = Subjects.behaviorSubject(
+          repo.kotlinParams.fieldStyle,
+          onChange: (value) => repo.setKotlinParams(fieldStyle: value),
+        ),
+        _kotlinPrefixController = Controllers.textController(
+          text: repo.kotlinParams.prefix,
+          onChanged: (value) => repo.setKotlinParams(prefix: value),
+        ),
+        _kotlinPostfixController = Controllers.textController(
+          text: repo.kotlinParams.postfix,
+          onChanged: (value) => repo.setKotlinParams(postfix: value),
+        ),
+        _kotlinParentViewController = Controllers.textController(
+          text: repo.kotlinParams.parentView,
+          onChanged: (value) => repo.setKotlinParams(parentView: value),
+        );
+
+  final BehaviorSubject<Language> _language;
 
   final layoutXmlController = TextEditingController(text: "");
   final fieldsController = TextEditingController(text: "");
@@ -19,23 +68,19 @@ class ViewModel {
 
   // Java observables
 
-  final BehaviorSubject<JavaAccessModifier> _javaAccessModifierController =
-      BehaviorSubject.seeded(JavaAccessModifier.public);
-  final BehaviorSubject<VariableStyle> _javaFieldStyleController =
-      BehaviorSubject.seeded(VariableStyle.lowerCamelCase);
-  final _javaPrefixController = TextEditingController(text: "");
-  final _javaPostfixController = TextEditingController(text: "View");
-  final _javaParentViewController = TextEditingController(text: "rootView");
+  final BehaviorSubject<JavaAccessModifier> _javaAccessModifierController;
+  final BehaviorSubject<VariableStyle> _javaFieldStyleController;
+  final TextEditingController _javaPrefixController;
+  final TextEditingController _javaPostfixController;
+  final TextEditingController _javaParentViewController;
 
   // Kotlin observables
 
-  final BehaviorSubject<KotlinAccessModifier> _kotlinAccessModifier =
-      BehaviorSubject.seeded(KotlinAccessModifier.public);
-  final BehaviorSubject<VariableStyle> _kotlinFieldStyleController =
-      BehaviorSubject.seeded(VariableStyle.lowerCamelCase);
-  final _kotlinPrefixController = TextEditingController(text: "");
-  final _kotlinPostfixController = TextEditingController(text: "View");
-  final _kotlinParentViewController = TextEditingController(text: "rootView");
+  final BehaviorSubject<KotlinAccessModifier> _kotlinAccessModifier;
+  final BehaviorSubject<VariableStyle> _kotlinFieldStyleController;
+  final TextEditingController _kotlinPrefixController;
+  final TextEditingController _kotlinPostfixController;
+  final TextEditingController _kotlinParentViewController;
 
   // common setters and getters
 

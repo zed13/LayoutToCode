@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 typedef VoidCallback = Function();
 
@@ -46,5 +47,29 @@ abstract class RxState<T extends StatefulWidget> extends State<T> {
   void dispose() {
     _subscribtions.forEach((element) => element.cancel());
     super.dispose();
+  }
+}
+
+class Subjects {
+  static BehaviorSubject<T> behaviorSubject<T>(
+    T initialValue, {
+    Function(T) onChange,
+  }) =>
+      BehaviorSubject.seeded(initialValue)
+        ..listen((value) {
+          if (onChange != null) onChange(value);
+        });
+}
+
+class Controllers {
+  static TextEditingController textController({
+    @required String text,
+    Function(String) onChanged,
+  }) {
+    final controller = TextEditingController(text: text);
+    controller.addListener(() {
+      if (onChanged != null) onChanged(controller.text);
+    });
+    return controller;
   }
 }
