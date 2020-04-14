@@ -39,7 +39,7 @@ class JavaGenerator implements Generator {
 
     for (var id in ids) {
       builder.writeln(
-          "var ${javaAccessName(accessLevel)} ${id.widgetName} ${_generateVariableName(id)};");
+          "var ${javaAccessName(accessLevel)} ${correctWidgetName(id.widgetName)} ${_generateVariableName(id)};");
     }
 
     return builder.toString();
@@ -92,7 +92,7 @@ class KotlinGenerator implements Generator {
 
     for (var id in ids) {
       builder.writeln(
-          "${kotlinAccessName(accessLevel)} ${_generateVariableName(id)}: ${id.widgetName}?=null");
+          "${kotlinAccessName(accessLevel)} var ${_generateVariableName(id)}: ${correctWidgetName(id.widgetName)}? = null");
     }
 
     return builder.toString();
@@ -156,6 +156,18 @@ String idToName(
   return prefix.isEmpty
       ? nameWithoutPrefix
       : prefix + nameWithoutPrefix.capitalize();
+}
+
+String correctWidgetName(
+  widgetName
+) {
+  if (widgetName == "include") {
+    return "ViewGroup";
+  }
+  if (widgetName.contains(".")) {
+    return widgetName.split(".").toList().last;
+  }
+  return widgetName;
 }
 
 String generateName(
