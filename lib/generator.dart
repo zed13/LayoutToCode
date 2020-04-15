@@ -39,7 +39,7 @@ class JavaGenerator implements Generator {
 
     for (var id in ids) {
       builder.writeln(
-          "var ${javaAccessName(accessLevel)} ${correctWidgetName(id.widgetName)} ${_generateVariableName(id)};");
+          "${javaAccessName(accessLevel)} ${correctWidgetName(id.widgetName)} ${_generateVariableName(id)};");
     }
 
     return builder.toString();
